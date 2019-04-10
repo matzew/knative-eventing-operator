@@ -3,12 +3,11 @@ package install
 import (
 	"context"
 	"flag"
-	"os"
 
 	"github.com/jcrossley3/manifestival/yaml"
 	eventingv1alpha1 "github.com/openshift-knative/knative-eventing-operator/pkg/apis/eventing/v1alpha1"
+	"github.com/openshift-knative/knative-eventing-operator/version"
 	"github.com/operator-framework/operator-sdk/pkg/k8sutil"
-
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -110,21 +109,13 @@ func (r *ReconcileInstall) Reconcile(request reconcile.Request) (reconcile.Resul
 	}
 	// Update status
 	instance.Status.Resources = r.config.ResourceNames()
-	instance.Status.Version = getResourceVersion()
+	instance.Status.Version = version.Version
 	err = r.client.Status().Update(context.TODO(), instance)
 	if err != nil {
 		reqLogger.Error(err, "Failed to update status")
 		return reconcile.Result{}, err
 	}
 	return reconcile.Result{}, nil
-}
-
-func getResourceVersion() string {
-	v, found := os.LookupEnv("RESOURCE_VERSION")
-	if !found {
-		return "UNKNOWN"
-	}
-	return v
 }
 
 func autoInstall(c client.Client, ns string) error {
