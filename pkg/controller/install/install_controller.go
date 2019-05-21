@@ -171,6 +171,7 @@ func addSCCforSpecialClusterRoles(u *unstructured.Unstructured) *unstructured.Un
 		"knative-eventing-controller",
 		"in-memory-channel-controller",
 		"in-memory-channel-dispatcher",
+		"eventing-sources-controller",
 	}
 
 	matchesClusterRole := func(cr string) bool {
