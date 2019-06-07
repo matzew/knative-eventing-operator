@@ -50,6 +50,13 @@ func (is *KnativeEventingStatus) MarkInstallFailed(msg string) {
 		"Install failed with message: %s", msg)
 }
 
+func (is *KnativeEventingStatus) MarkIgnored(msg string) {
+	conditions.Manage(is).MarkFalse(
+		InstallSucceeded,
+		"Ignored",
+		"Install not attempted: %s", msg)
+}
+
 func (is *KnativeEventingStatus) MarkInstallSucceeded() {
 	conditions.Manage(is).MarkTrue(InstallSucceeded)
 }
